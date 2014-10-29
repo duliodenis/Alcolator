@@ -8,22 +8,57 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *beerPercentTextField;
-@property (weak, nonatomic) IBOutlet UISlider *beerCountSlider;
-@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
-@property (weak, nonatomic) IBOutlet UILabel *sliderValueLabel;
+@interface ViewController () <UITextViewDelegate>
+@property (weak, nonatomic) UITextField *beerPercentTextField;
+@property (weak, nonatomic) UISlider *beerCountSlider;
+@property (weak, nonatomic) UILabel *resultLabel;
+@property (weak, nonatomic) UIButton *calculateButton;
+@property (weak, nonatomic) UITapGestureRecognizer *hideKeyboardTapGestureRecognizer;
+@property (weak, nonatomic) UILabel *sliderValueLabel;
 @end
 
 @implementation ViewController
 
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)loadView {
+    // Allocate and intialize the all-encompassing view
+    self.view = [[UIView alloc] init];
+    
+    // Allocate and initialize each of the views and the gesture recognizer
+    UITextField *textField = [[UITextField alloc] init];
+    UISlider *slider = [[UISlider alloc]init];
+    UILabel *label = [[UILabel alloc]init];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
+    UILabel *label2 = [[UILabel alloc] init];
+    
+    [self.view addSubview:textField];
+    [self.view addSubview:slider];
+    [self.view addSubview:label];
+    [self.view addSubview:button];
+    [self.view addSubview:label2];
+    [self.view addGestureRecognizer:tap];
+    
+    // Assign the views and gesture recognizer to our properties
+    self.beerPercentTextField = textField;
+    self.beerCountSlider = slider;
+    self.resultLabel = label;
+    self.sliderValueLabel = label2;
+    self.calculateButton = button;
+    self.hideKeyboardTapGestureRecognizer = tap;
 }
 
 
-- (IBAction)textFieldDidChange:(UITextField *)sender {
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // set primary view background to lightGrayColor
+    
+    
+}
+
+
+- (void)textFieldDidChange:(UITextField *)sender {
     NSString *enteredText = sender.text;
     float enteredNumber = [enteredText floatValue];
     
@@ -33,14 +68,14 @@
 }
 
 
-- (IBAction)sliderValueDidChange:(UISlider *)sender {
+- (void)sliderValueDidChange:(UISlider *)sender {
     NSLog(@"Slider value changed to %f", sender.value);
     self.sliderValueLabel.text = [NSString stringWithFormat:@"%.1f", self.beerCountSlider.value];
     [self.beerPercentTextField resignFirstResponder];
 }
 
 
-- (IBAction)buttonPressed:(id)sender {
+- (void)buttonPressed:(id)sender {
     [self.beerPercentTextField resignFirstResponder];
     
     // calculate how much alcohol is in all those beers
@@ -81,7 +116,7 @@
 }
 
 
-- (IBAction)tapGestureRecognizer:(UITapGestureRecognizer *)sender {
+- (void)tapGestureRecognizer:(UITapGestureRecognizer *)sender {
     [self.beerPercentTextField resignFirstResponder];
 }
 
