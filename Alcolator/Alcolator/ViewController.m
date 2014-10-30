@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UITextViewDelegate>
+@interface ViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) UITextField *beerPercentTextField;
 @property (weak, nonatomic) UISlider *beerCountSlider;
 @property (weak, nonatomic) UILabel *resultLabel;
@@ -53,8 +53,49 @@
     [super viewDidLoad];
     
     // set primary view background to lightGrayColor
+    self.view.backgroundColor = [UIColor lightGrayColor];
     
+    // set the delegate to the text field to be self and the placeholder text
+    self.beerPercentTextField.delegate = self;
+    self.beerPercentTextField.placeholder = NSLocalizedString(@"% Alcohol Content Per Beer", @"Beer percent placeholder text");
     
+    // Set beerCountSlider to call sliderValueDidChange when the value changes
+    [self.beerCountSlider addTarget:self action:@selector(sliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    
+    // Set the minimum and maximum number of beers
+    self.beerCountSlider.minimumValue = 1.0f;
+    self.beerCountSlider.maximumValue = 10.0f;
+    
+    // Set the button to call buttonPressed on TouchUp Inside Event and set title
+    [self.calculateButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.calculateButton setTitle:NSLocalizedString(@"Calculate!", @"Calculate Command") forState:UIControlStateNormal];
+    
+    // Set the tap gesture recognizer to call tapGestureDidFire: when a tap is detected
+    [self.hideKeyboardTapGestureRecognizer addTarget:self action:@selector(tapGestureDidFire:)];
+
+    // Remove the maximum number of lines on the label
+    self.resultLabel.numberOfLines = 0;
+}
+
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    CGFloat viewWidth = 320;
+    CGFloat padding = 20;
+    CGFloat itemWidth = viewWidth - padding - padding;
+    CGFloat itemHeight = 44;
+    
+    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
+    
+    CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
+    self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
+    
+    CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
+    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight);
+    
+    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
+    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
 }
 
 
@@ -116,7 +157,7 @@
 }
 
 
-- (void)tapGestureRecognizer:(UITapGestureRecognizer *)sender {
+- (void)tapGestureDidFire:(UITapGestureRecognizer *)sender {
     [self.beerPercentTextField resignFirstResponder];
 }
 
