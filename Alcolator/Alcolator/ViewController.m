@@ -16,6 +16,20 @@
 @implementation ViewController
 
 
+#pragma mark - View Lifecycle
+
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.title = NSLocalizedString(@"Wine", @"Wine title");
+        [self.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -18)];
+    }
+    
+    return self;
+}
+
+
 - (void)loadView {
     // Allocate and intialize the all-encompassing view
     self.view = [[UIView alloc] init];
@@ -47,7 +61,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Wine", @"Wine Navigation Title");
     
     // set primary view background to lightGrayColor
     self.view.backgroundColor = [UIColor colorWithRed:0.465 green:0.427 blue:0.667 alpha:1.000];
@@ -95,7 +108,7 @@
     
     CGFloat padding = 20;
     CGFloat itemWidth = viewWidth - padding - padding;
-    CGFloat itemHeight = 44 + 84; // Added Navigation Bar
+    CGFloat itemHeight = 44; //+ 84; Added Navigation Bar
     
     self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
     self.beerPercentTextField.font = font;
@@ -120,6 +133,8 @@
 }
 
 
+#pragma mark - Action Methods
+
 - (void)textFieldDidChange:(UITextField *)sender {
     NSString *enteredText = sender.text;
     float enteredNumber = [enteredText floatValue];
@@ -131,12 +146,10 @@
 
 
 - (void)sliderValueDidChange:(UISlider *)sender {
-    NSLog(@"Slider value changed to %f", sender.value);
-    self.sliderValueLabel.text = [NSString stringWithFormat:@"%.1f", self.beerCountSlider.value];
-    int numberOfBeers = self.beerCountSlider.value;
-    self.title = [NSString stringWithFormat:@"Wine (for %d beers)", numberOfBeers];;
+    [self.tabBarItem setBadgeValue:[NSString stringWithFormat:@"%d",(int)sender.value]];
     [self.beerPercentTextField resignFirstResponder];
 }
+
 
 
 - (void)buttonPressed:(id)sender {
@@ -180,9 +193,14 @@
 }
 
 
+#pragma mark - Gesture Method
+
 - (void)tapGestureDidFire:(UITapGestureRecognizer *)sender {
     [self.beerPercentTextField resignFirstResponder];
 }
+
+
+#pragma mark - Status Bar Tint
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;

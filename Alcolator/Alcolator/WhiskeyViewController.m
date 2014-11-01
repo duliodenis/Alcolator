@@ -14,10 +14,17 @@
 
 @implementation WhiskeyViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = NSLocalizedString(@"Whiskey", @"Whisky Navigation Title");
+
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.title = NSLocalizedString(@"Whiskey", @"Whiskey title");
+    }
+    
+    return self;
 }
+
 
 - (void)buttonPressed:(id)sender {
     [self.beerPercentTextField resignFirstResponder];
@@ -55,12 +62,5 @@
     self.resultLabel.text = resultText;
 }
 
-- (void)sliderValueDidChange:(UISlider *)sender {
-    NSLog(@"Slider value changed to %f", sender.value);
-    self.sliderValueLabel.text = [NSString stringWithFormat:@"%.1f", self.beerCountSlider.value];
-    int numberOfBeers = self.beerCountSlider.value;
-    self.title = [NSString stringWithFormat:@"Whisky (for %d beers)", numberOfBeers];;
-    [self.beerPercentTextField resignFirstResponder];
-}
 
 @end
