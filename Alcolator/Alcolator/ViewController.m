@@ -11,7 +11,6 @@
 @interface ViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) UIButton *calculateButton;
 @property (weak, nonatomic) UITapGestureRecognizer *hideKeyboardTapGestureRecognizer;
-@property (weak, nonatomic) UILabel *sliderValueLabel;
 @end
 
 @implementation ViewController
@@ -48,6 +47,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = NSLocalizedString(@"Wine", @"Wine Navigation Title");
     
     // set primary view background to lightGrayColor
     self.view.backgroundColor = [UIColor colorWithRed:0.465 green:0.427 blue:0.667 alpha:1.000];
@@ -84,7 +84,6 @@
     
     CGFloat viewWidth = 320;
     
-    
     if (([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft) ||
         ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight)) {
         viewWidth = 480;
@@ -96,7 +95,7 @@
     
     CGFloat padding = 20;
     CGFloat itemWidth = viewWidth - padding - padding;
-    CGFloat itemHeight = 44;
+    CGFloat itemHeight = 44 + 84; // Added Navigation Bar
     
     self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
     self.beerPercentTextField.font = font;
@@ -118,7 +117,6 @@
     self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
     self.calculateButton.titleLabel.font = boldFont;
     [self.calculateButton setTitleColor:textColor forState:UIControlStateNormal];
-    //self.calculateButton.titleLabel.tintColor = textColor;
 }
 
 
@@ -135,6 +133,8 @@
 - (void)sliderValueDidChange:(UISlider *)sender {
     NSLog(@"Slider value changed to %f", sender.value);
     self.sliderValueLabel.text = [NSString stringWithFormat:@"%.1f", self.beerCountSlider.value];
+    int numberOfBeers = self.beerCountSlider.value;
+    self.title = [NSString stringWithFormat:@"Wine (for %d beers)", numberOfBeers];;
     [self.beerPercentTextField resignFirstResponder];
 }
 
