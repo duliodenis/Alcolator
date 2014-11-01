@@ -9,9 +9,6 @@
 #import "ViewController.h"
 
 @interface ViewController () <UITextFieldDelegate>
-@property (weak, nonatomic) UITextField *beerPercentTextField;
-@property (weak, nonatomic) UISlider *beerCountSlider;
-@property (weak, nonatomic) UILabel *resultLabel;
 @property (weak, nonatomic) UIButton *calculateButton;
 @property (weak, nonatomic) UITapGestureRecognizer *hideKeyboardTapGestureRecognizer;
 @property (weak, nonatomic) UILabel *sliderValueLabel;
@@ -53,7 +50,7 @@
     [super viewDidLoad];
     
     // set primary view background to lightGrayColor
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor colorWithRed:0.465 green:0.427 blue:0.667 alpha:1.000];
     
     // set the delegate to the text field to be self and the placeholder text
     self.beerPercentTextField.delegate = self;
@@ -81,21 +78,47 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
+    UIFont *font = [UIFont fontWithName:@"Avenir-Light" size:14];
+    UIFont *boldFont = [UIFont fontWithName:@"Avenir-Heavy" size:14];
+    UIColor *textColor = [UIColor whiteColor];
+    
     CGFloat viewWidth = 320;
+    
+    
+    if (([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft) ||
+        ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight)) {
+        viewWidth = 480;
+    }
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        viewWidth = 680;
+    }
+    
     CGFloat padding = 20;
     CGFloat itemWidth = viewWidth - padding - padding;
     CGFloat itemHeight = 44;
     
     self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
+    self.beerPercentTextField.font = font;
+    self.beerPercentTextField.textColor = textColor;
+    self.beerPercentTextField.tintColor = textColor;
+    self.beerPercentTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.beerPercentTextField.placeholder attributes:@{NSForegroundColorAttributeName: textColor}];
     
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
     self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
+    self.beerCountSlider.tintColor = textColor;
     
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
     self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight);
+    self.resultLabel.font = font;
+    self.resultLabel.textColor = textColor;
+    self.resultLabel.tintColor = textColor;
     
     CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
     self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
+    self.calculateButton.titleLabel.font = boldFont;
+    [self.calculateButton setTitleColor:textColor forState:UIControlStateNormal];
+    //self.calculateButton.titleLabel.tintColor = textColor;
 }
 
 
@@ -161,5 +184,8 @@
     [self.beerPercentTextField resignFirstResponder];
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
 @end
